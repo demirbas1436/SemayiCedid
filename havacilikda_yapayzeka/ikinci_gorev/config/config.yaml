@@ -1,0 +1,75 @@
+# ============================================================
+# Görev 2: Pozisyon Tespiti Konfigürasyonu
+# ============================================================
+
+project:
+  name: "pozisyon-tespiti"
+  version: "1.0.0"
+  description: "Havacılıkta Yapay Zekâ — Görev 2: Pozisyon Kestirimi"
+
+# Yarışma Parametreleri
+competition:
+  fps: 7.5
+  session_duration_minutes: 5
+  frames_per_session: 2250
+  healthy_frames: 450         # İlk 1 dakika → sağlıklı pozisyon
+  unhealthy_frames: 1800      # Son 4 dakika → sağlıksız olabilir
+  camera_angle_range: [70, 90]
+
+# Başlangıç Pozisyonu
+initial_position:
+  x0: 0.0   # metre
+  y0: 0.0   # metre
+  z0: 0.0   # metre
+
+# Sağlık Durumu
+health_status:
+  healthy: 1      # Pozisyon güvenilir → sunucu değeri kullanılabilir
+  unhealthy: 0    # Pozisyon güvenilmez → kendi kestirimin gönderilmeli
+
+# Kamera Parametreleri (yarışmada paylaşılacak, şimdilik varsayılan)
+camera:
+  focal_length_px: 800.0        # piksel cinsinden odak uzaklığı
+  principal_point: [960, 540]   # optik merkez (Full HD için)
+  resolution: [1920, 1080]
+  # İç parametre matrisi (intrinsic matrix) K:
+  # | fx  0  cx |     fx = fy = focal_length_px
+  # | 0  fy  cy |     cx, cy = principal_point
+  # | 0   0   1 |
+  distortion_coeffs: [0.0, 0.0, 0.0, 0.0, 0.0]  # Bozulma katsayıları
+
+# Görsel Odometri Parametreleri
+visual_odometry:
+  feature_detector: "ORB"     # ORB, SIFT, AKAZE
+  max_features: 3000
+  match_ratio_threshold: 0.75
+  ransac_reproj_threshold: 1.0
+  min_matches: 20
+  scale_recovery_method: "height"   # "height" veya "reference"
+
+# Model Konfigürasyonu (opsiyonel, öğrenen model kullanılırsa)
+model:
+  architecture: null              # Kullanılacaksa: "flownet", "droidslam" vb.
+  weights_path: null
+  device: "cuda"
+
+# Veri Yolları
+paths:
+  frames: "data/raw/frames"
+  calibration: "data/calibration"
+  processed: "data/processed"
+  outputs: "outputs"
+  positions: "outputs/positions"
+  visualizations: "outputs/visualizations"
+
+# Sunucu Bağlantısı
+server:
+  base_url: "http://localhost:8080"
+  team_token: "TEAM_TOKEN_HERE"
+  timeout_seconds: 10
+  max_retries: 3
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "outputs/position_estimation.log"

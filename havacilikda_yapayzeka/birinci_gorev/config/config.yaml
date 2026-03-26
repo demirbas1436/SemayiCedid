@@ -1,0 +1,104 @@
+# ============================================================
+# Proje Genel Konfigürasyonu
+# ============================================================
+
+project:
+  name: "havacılık-yapay-zeka"
+  version: "1.0.0"
+  description: "Havacılıkta Yapay Zekâ Yarışması - Nesne Tespiti"
+
+# Yarışma Parametreleri
+competition:
+  fps: 7.5
+  session_duration_minutes: 5
+  frames_per_session: 2250
+  resolutions:
+    - "1920x1080"   # Full HD
+    - "3840x2160"   # 4K
+  camera_angle_range: [70, 90]   # derece
+  camera_types: ["rgb", "thermal"]
+
+# Sınıf Tanımları
+classes:
+  tasit:
+    id: 0
+    name: "Taşıt"
+    motion_values: [0, 1]      # 0=hareketsiz, 1=hareketli
+    landing_value: -1
+  insan:
+    id: 1
+    name: "İnsan"
+    motion_value: -1
+    landing_value: -1
+  uap:
+    id: 2
+    name: "Uçan Araba Park"
+    motion_value: -1
+    landing_values: [0, 1]     # 0=uygun değil, 1=uygun
+    diameter_cm: 450           # 4.5 metre çap
+    color: "blue"
+  uai:
+    id: 3
+    name: "Uçan Ambulans İniş"
+    motion_value: -1
+    landing_values: [0, 1]
+    diameter_cm: 450           # 4.5 metre çap
+    color: "red"
+
+# İniş Durumu (UAP/UAİ)
+landing_status:
+  not_suitable: 0    # Uygun Değil
+  suitable: 1        # Uygun
+  not_applicable: -1 # İniş Alanı Değil
+
+# İniş Kuralları (LandingClassifier parametreleri)
+landing_rules:
+  border_margin_px: 2          # Kare kenarı toleransı
+  overlap_iou_threshold: 0.01  # Engel örtüşme eşiği
+  proximity_factor: 1.3        # Perspektif güvenlik bölgesi büyütme
+  visual_edge_threshold: 15.0  # Görsel engel kenar yoğunluğu eşiği
+
+# Sunucu Bağlantı Parametreleri (2.1.3)
+server:
+  base_url: "http://localhost:8080"
+  team_token: "TEAM_TOKEN_HERE"
+  timeout_seconds: 10
+  max_retries: 3
+  total_frames: 2250
+
+# Model Konfigürasyonu
+model:
+  architecture: "yolov8"
+  backbone: "yolov8x"
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  input_size: [1280, 1280]
+  device: "cuda"             # "cuda" veya "cpu"
+
+# Veri Yolları
+paths:
+  data_raw_rgb: "data/raw/rgb"
+  data_raw_thermal: "data/raw/thermal"
+  data_processed: "data/processed"
+  annotations: "data/annotations"
+  splits: "data/splits"
+  model_weights: "models/weights"
+  outputs: "outputs"
+  predictions: "outputs/predictions"
+  visualizations: "outputs/visualizations"
+
+# Eğitim Parametreleri
+training:
+  epochs: 100
+  batch_size: 16
+  learning_rate: 0.001
+  optimizer: "AdamW"
+  image_size: 1280
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "outputs/training.log"

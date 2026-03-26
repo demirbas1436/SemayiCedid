@@ -1,0 +1,33 @@
+# ============================================================
+# Görev 2: Pozisyon Tespiti - Python Bağımlılıkları
+# ============================================================
+
+# --- Derin Öğrenme ---
+torch>=2.0.0
+torchvision>=0.15.0
+
+# --- Görüntü İşleme ---
+opencv-python>=4.8.0
+opencv-contrib-python>=4.8.0   # Ekstra OpenCV modülleri (SIFT, SURF vb.)
+Pillow>=10.0.0
+
+# --- Bilimsel Hesaplama ---
+numpy>=1.24.0
+scipy>=1.11.0
+
+# --- Veri İşleme ---
+pandas>=2.0.0
+PyYAML>=6.0.0
+
+# --- Görselleştirme ---
+matplotlib>=3.7.0
+
+# --- Utility ---
+tqdm>=4.65.0
+loguru>=0.7.0
+click>=8.1.0
+requests>=2.31.0
+
+# --- Geliştirme ---
+pytest>=7.4.0
+jupyter>=1.0.0

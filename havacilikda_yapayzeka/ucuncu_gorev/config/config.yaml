@@ -1,0 +1,75 @@
+# ============================================================
+# Görev 3: Görüntü Eşleme Konfigürasyonu
+# ============================================================
+
+project:
+  name: "goruntu-esleme"
+  version: "1.0.0"
+  description: "Havacılıkta Yapay Zekâ — Görev 3: Görüntü Eşleme"
+
+# Yarışma Parametreleri
+competition:
+  fps: 7.5
+  session_duration_minutes: 5
+  frames_per_session: 2250
+
+# Eşleme (Matching) Parametreleri
+matching:
+  # Özellik çıkarımı
+  feature_extractor: "SIFT"       # SIFT, ORB, AKAZE, SuperPoint
+  max_features: 5000
+
+  # Eşleştirme stratejisi
+  match_method: "BF_KNN"          # BF_KNN, FLANN
+  ratio_threshold: 0.75           # Lowe's ratio test
+  min_good_matches: 10
+
+  # Homografi
+  ransac_reproj_threshold: 5.0
+  min_inliers: 8
+
+  # Derin öğrenme tabanlı (opsiyonel)
+  deep_model: null                # "superglue", "loftr" vb.
+  deep_weights: null
+
+# Çapraz-modal eşleme (RGB ↔ Termal)
+cross_modal:
+  enabled: true
+  preprocessing: "histogram_eq"   # Histogram eşitleme ile normalize et
+
+# Benzerlik eşik değerleri
+similarity:
+  feature_match_threshold: 0.60   # Özellik eşleşme skoru eşiği
+  template_match_threshold: 0.70  # Şablon eşleme skoru eşiği
+  deep_match_threshold: 0.50      # Derin öğrenme skoru eşiği
+
+# Çoklu-ölçek arama (farklı irtifalar için)
+multi_scale:
+  enabled: true
+  scales: [0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
+
+# Çoklu-açı arama
+multi_angle:
+  enabled: true
+  angles: [0, 45, 90, 135, 180, 225, 270, 315]
+
+# Veri Yolları
+paths:
+  reference_objects: "data/reference_objects"
+  frames: "data/raw/frames"
+  processed: "data/processed"
+  model_weights: "models/weights"
+  detections: "outputs/detections"
+  visualizations: "outputs/visualizations"
+
+# Sunucu Bağlantısı
+server:
+  base_url: "http://localhost:8080"
+  team_token: "TEAM_TOKEN_HERE"
+  timeout_seconds: 10
+  max_retries: 3
+
+# Logging
+logging:
+  level: "INFO"
+  log_file: "outputs/matching.log"
